@@ -1,0 +1,26 @@
+package collections
+
+import "testing"
+
+func TestGeneral(t *testing.T) {
+	l1 := List[int]{1, 2, 3, 4, 5, 6, 7}
+
+	l2 := l1.Iterator().
+		Filter(func(it int) bool { return it > 1 }).
+		Map(func(it int) int { return it * 2 }).
+		Filter(func(it int) bool { return it < 7 })
+
+	t.Log(l2.ToList())
+
+	l3 := IteratorMap(l1.Iterator(), func(it int) float32 {
+		t.Log("map 1", it)
+		return float32(it)/3
+	}).Filter(func(item float32) bool {
+		t.Log("filter 2", item)
+		return float32(int(item)) == item
+	}).Filter(func(item float32) bool {
+		t.Log("filter 3", item)
+		return item > 0
+	}).ToList()
+	t.Log(l3)
+}

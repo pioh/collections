@@ -1,0 +1,57 @@
+package collections
+
+type Iterator[T any] func() (next T, ok bool)
+
+type Collector[T any] interface {
+	Collect(it Iterator[T])
+}
+
+func (it Iterator[T]) To(collector Collector[T]) {
+	collector.Collect(it)
+}
+
+func (it Iterator[T]) ToList() List[T] {
+	var list List[T]
+	it.To(&list)
+	return list
+}
+func (it Iterator[T]) ToChan() Chan[T] {
+	ch := Chan[T](make(chan T))
+	it.To(ch)
+	return ch
+}
+
+func (it Iterator[T]) Filter(filter func(item T) bool) Iterator[T] {
+	return func() (next T, ok bool) {
+		next, ok = it()
+		for ok && !filter(next) {
+			next, ok = it()
+		}
+		return next, ok
+	}
+}
+func IteratorMap[L any, R any](it Iterator[L], mapper func(item L) R) Iterator[R] {
+	return func() (next R, ok bool) {
+		item, ok := it()
+		if !ok {
+			return
+		}
+		return mapper(item), ok
+	}
+}
+func (it Iterator[T]) Map(mapper func(item T) T) Iterator[T] {
+	return IteratorMap(it, mapper)
+}
+
+func IteratorReduce[L any, R any](it Iterator[R], left L, join func(left L, right R) L) L {
+	item, ok := it()
+	for ok {
+		left = join(left, item)
+		item, ok = it()
+	}
+	return left
+}
+
+func (it Iterator[T]) Reduce(left T, join func(left, right T) T) T {
+	return IteratorReduce(it, left, join)
+}

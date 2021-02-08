@@ -1,0 +1,49 @@
+package collections
+
+import (
+	"reflect"
+	"testing"
+)
+
+func TestList_Iterator(t *testing.T) {
+	tests := []struct {
+		name string
+		l    List[int]
+		next []int
+		ok   []bool
+	}{
+		{"3 ints", List[int]{1, 2, 3}, []int{1, 2, 3, 0, 0}, []bool{true, true, true, false, false}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			it := tt.l.Iterator()
+			for i, next := range tt.next {
+				ok := tt.ok[i]
+				if n, o := it(); n != next || o != ok {
+					t.Errorf("Iterator()[%v] = {%v,%v}, want {%v,%v}", i, n, o, next, ok)
+				}
+			}
+		})
+	}
+}
+
+func TestList_Collect(t *testing.T) {
+	tests := []struct {
+		name string
+		l    List[int]
+		it   Iterator[int]
+		want List[int]
+	}{
+		{"1", List[int]{}, List[int]{4, 5, 6}.Iterator(), List[int]{4, 5, 6}},
+		{"2", List[int]{1, 2, 3}, List[int]{4, 5, 6}.Iterator(), List[int]{1, 2, 3, 4, 5, 6}},
+		{"1", nil, List[int]{4, 5, 6}.Iterator(), List[int]{4, 5, 6}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.l.Collect(tt.it)
+			if !reflect.DeepEqual(tt.l, tt.want) {
+				t.Errorf("not equal %v and %v", tt.l, tt.want)
+			}
+		})
+	}
+}

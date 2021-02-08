@@ -1,0 +1,127 @@
+package collections
+
+import (
+	"reflect"
+	"testing"
+)
+
+func TestIteratorMap(t *testing.T) {
+	tests := []struct {
+		name string
+		from     List[int]
+		want   List[float32]
+		mapper func(item int) float32
+	}{
+		{"1",List[int]{1, 2, 3}, List[float32]{0.5, 1.0, 1.5}, func(item int) float32 { return float32(item) / 2 }},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := IteratorMap(tt.from.Iterator(), tt.mapper).ToList(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("IteratorMap() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIteratorReduce(t *testing.T) {
+	//type args struct {
+	//	it   Iterator
+	//	left L
+	//	join func(left L, right R) L
+	//}
+	//tests := []struct {
+	//	name string
+	//	args args
+	//	want L
+	//}{
+	//	// TODO: Add test cases.
+	//}
+	//for _, tt := range tests {
+	//	t.Run(tt.name, func(t *testing.T) {
+	//		if got := IteratorReduce(tt.args.it, tt.args.left, tt.args.join); !reflect.DeepEqual(got, tt.want) {
+	//			t.Errorf("IteratorReduce() = %v, want %v", got, tt.want)
+	//		}
+	//	})
+	//}
+}
+
+func TestIterator_Filter(t *testing.T) {
+	//type args struct {
+	//	filter func(item T) bool
+	//}
+	//tests := []struct {
+	//	name string
+	//	it   Iterator
+	//	args args
+	//	want Iterator
+	//}{
+	//	// TODO: Add test cases.
+	//}
+	//for _, tt := range tests {
+	//	t.Run(tt.name, func(t *testing.T) {
+	//		if got := tt.it.Filter(tt.args.filter); !reflect.DeepEqual(got, tt.want) {
+	//			t.Errorf("Filter() = %v, want %v", got, tt.want)
+	//		}
+	//	})
+	//}
+}
+
+func TestIterator_Map(t *testing.T) {
+	//type args struct {
+	//	mapper func(item T) T
+	//}
+	//tests := []struct {
+	//	name string
+	//	it   Iterator
+	//	args args
+	//	want Iterator
+	//}{
+	//	// TODO: Add test cases.
+	//}
+	//for _, tt := range tests {
+	//	t.Run(tt.name, func(t *testing.T) {
+	//		if got := tt.it.Map(tt.args.mapper); !reflect.DeepEqual(got, tt.want) {
+	//			t.Errorf("Map() = %v, want %v", got, tt.want)
+	//		}
+	//	})
+	//}
+}
+
+func TestIterator_Reduce(t *testing.T) {
+	//type args struct {
+	//	left T
+	//	join func(left, right T) T
+	//}
+	//tests := []struct {
+	//	name string
+	//	it   Iterator
+	//	args args
+	//	want T
+	//}{
+	//	// TODO: Add test cases.
+	//}
+	//for _, tt := range tests {
+	//	t.Run(tt.name, func(t *testing.T) {
+	//		if got := tt.it.Reduce(tt.args.left, tt.args.join); !reflect.DeepEqual(got, tt.want) {
+	//			t.Errorf("Reduce() = %v, want %v", got, tt.want)
+	//		}
+	//	})
+	//}
+}
+
+func TestIterator_to(t *testing.T) {
+	//type args struct {
+	//	collector Collector
+	//}
+	//tests := []struct {
+	//	name string
+	//	it   Iterator
+	//	args args
+	//}{
+	//	// TODO: Add test cases.
+	//}
+	//for _, tt := range tests {
+	//	t.Run(tt.name, func(t *testing.T) {
+	//	})
+	//}
+}

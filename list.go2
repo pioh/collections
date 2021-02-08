@@ -1,0 +1,24 @@
+package collections
+
+type List[T any] []T
+
+func (l List[T]) Iterator() Iterator[T] {
+	i := -1
+	return func() (next T, ok bool) {
+		i++
+		if i < len(l) {
+			return l[i], true
+		}
+		return next, false
+	}
+}
+
+func (l *List[T]) Collect(it Iterator[T]) {
+	for {
+		if next, ok := it(); ok {
+			*l = append(*l, next)
+		} else {
+			break
+		}
+	}
+}

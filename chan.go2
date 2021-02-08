@@ -1,0 +1,16 @@
+package collections
+
+type Chan[T any] chan T
+
+func (c Chan[T]) Iterator() Iterator[T] {
+	return func() (next T, ok bool) {
+		next, ok = <-c
+		return next, ok
+	}
+}
+
+func (c Chan[T]) Collect(it Iterator[T]) {
+	for next, ok := it(); ok; next, ok = it() {
+		c <- next
+	}
+}
